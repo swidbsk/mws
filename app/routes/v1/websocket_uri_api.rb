@@ -32,9 +32,10 @@ V1::WebsocketUriApi.define do
       )
       if outcome.success?
         websocket_uri = outcome.result
+        protocol = ENV['MWS_NO_SSL'] ? "ws" : "wss"
         json = {
             expiresAt: ttl.from_now.utc.iso8601,
-            uri: "wss://#{ENV['APP_DOMAIN']}/?token=#{websocket_uri.socket_id}",
+            uri: "#{protocol}://#{ENV['APP_DOMAIN']}/?token=#{websocket_uri.socket_id}",
             tags: websocket_uri.tags
         }
         respond_json(200, json)
